@@ -16,7 +16,7 @@ $(document).ready(function() {
 			}
 		}
 		return value.toString();
-	}
+	};
 
 	//what does this do?
 	var deck = [];
@@ -41,20 +41,42 @@ $(document).ready(function() {
 		 	} 
 		} 
 		return copy; 
-	}
+	};
 	
 	//Now call the shuffle function and save the result of what shuffle returns into your deck variable
 	
+	deck = shuffle(deck);
+
 	var cards_player_1 = [];
 	var cards_player_2 = [];
 	// write a function called deal that will evently divide the deck up between the two players
-	
-	
+	var deal = function(deck){
+
+		for (var i = 0; i < deck.length; i++) {
+			if (i % 2 === 1) {
+				cards_player_1.push(deck[i]);
+			}
+			else{
+				cards_player_2.push(deck[i]);
+			}	
+		}
+			
+	};
+	deal(deck);
 	//create a function (algorithm) called "war" that takes two cards as parameters, compares them and returns a winner. A tie should return false.
-	var war = function(){
-	
+	var war = function(card_1, card_2){
 		
-	}
+			if (card_1.number > card_2.number) {
+				return 'player 1 wins';
+			}
+			else if (card_2.number > card_1.number){
+				return 'player 2 wins';
+			}
+			
+			else{
+				return 'tie';
+			}
+	};
 	
 	var advance = function(){
 		//take the top two cards and display them
@@ -67,19 +89,45 @@ $(document).ready(function() {
 			$("#my-card-count").html(cards_player_2.length);
 			
 		}
-	}
-	
+	};
+
 	
 	//create a play function
 		//compare the cards
 		//give the winner both cards (at end of deck)
 	var play = function(){
-		
+		var winner = war(cards_player_1[0], cards_player_2[0]);
+		if (winner === 'player 1 wins'){
+			alert('player 1 wins!');
+			cards_player_1.push(cards_player_1.shift());
+			cards_player_1.push(cards_player_2.shift());
+		}
+		else if (winner === 'player 2 wins'){
+			alert('player 2 wins!');
+			cards_player_2.push(cards_player_1.shift());
+			cards_player_2.push(cards_player_2.shift());
+		}
+		else if(winner === 'tie'){
+			var tieWinner = war(cards_player_1[3], cards_player_2[3]);
+			if (tieWinner === 'player 1 wins'){
+				alert('player 1 wins');
+				cards_player_1 = cards_player_1.concat(cards_player_1.splice(0, 4));
+				cards_player_1 = cards_player_1.concat(cards_player_2.splice(0, 4));
+			}
+			else{
+				alert('player 2 wins');
+				cards_player_2 = cards_player_2.concat(cards_player_1.splice(0, 4));
+				cards_player_2 = cards_player_2.concat(cards_player_2.splice(0, 4));
+			}
+
+		}
+
 		//this function (defined below) will continue to the next turn
 		advance();
-	}
+	};
 	
 
+	
 	advance();
 	
 	$(".btn").click(function() {
